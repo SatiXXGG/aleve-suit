@@ -21,13 +21,13 @@ export namespace State {
 						event.SendToAllPlayers(name, value);
 					}
 				});
+			} else if (game.GetService("RunService").IsClient()) {
+				this.bindClient();
 			}
 		}
 
-		bindClient() {
-			if (!game.GetService("RunService").IsServer()) {
-				State.Client.values.set(this.name, this.value as Value<unknown>);
-			}
+		private bindClient() {
+			State.Client.values.set(this.name, this.value as Value<unknown>);
 		}
 	}
 
