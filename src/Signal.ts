@@ -1,4 +1,4 @@
-export class Signal<T> {
+export class Signal<T = unknown> {
 	private callbacks = new Set<(args: T) => void>();
 	listen(callback: (args: T) => void) {
 		this.callbacks.add(callback);
