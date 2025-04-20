@@ -3,7 +3,7 @@ export class Thread {
 		coroutine.wrap(() => {
 			task.wait(time);
 			callback();
-		});
+		})();
 	}
 
 	static delaySync(time: number, callback: () => void) {
