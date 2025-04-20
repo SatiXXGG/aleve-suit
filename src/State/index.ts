@@ -6,10 +6,12 @@ export namespace State {
 	export class Server<T> {
 		public value = new Value<T>();
 		private player: Player | undefined;
+		private name: string;
 		constructor(name: string, startValue: T, player?: Player) {
-			this.value.set(startValue);
+			this.name = name;
 			this.player = player;
 			if (game.GetService("RunService").IsServer()) {
+				this.value.set(startValue);
 				const event = events.Server.Get("client");
 
 				this.value.listen((value) => {
@@ -19,6 +21,12 @@ export namespace State {
 						event.SendToAllPlayers(name, value);
 					}
 				});
+			}
+		}
+
+		bindClient() {
+			if (!game.GetService("RunService").IsServer()) {
+				State.Client.values.set(this.name, this.value as Value<unknown>);
 			}
 		}
 	}
