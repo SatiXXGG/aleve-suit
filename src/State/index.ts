@@ -1,46 +1,42 @@
 import { Signal } from "../Signal";
+import { Value } from "../Value";
 import { events } from "./events";
 
 export namespace State {
-	export class Client<X> {
-		static map = new Map<string, Signal>();
-		public Signal = new Signal<X>();
-		static client = events.Client.Get("client");
-		private name = "";
+	export class Server<T> {
+		public value = new Value<T>();
+		private player: Player | undefined;
+		constructor(name: string, startValue: T, player?: Player) {
+			this.value.set(startValue);
+			this.player = player;
+			if (game.GetService("RunService").IsServer()) {
+				const event = events.Server.Get("client");
+
+				this.value.listen((value) => {
+					if (this.player) {
+						event.SendToPlayer(this.player, name, value);
+					} else {
+						event.SendToAllPlayers(name, value);
+					}
+				});
+			}
+		}
+	}
+
+	export class Client<T> {
+		static values = new Map<string, Value<unknown>>();
+		public value = new Value<T>();
 		constructor(name: string) {
-			this.name = name;
-			Client.map.set(this.name, this.Signal as Signal);
+			Client.values.set(name, this.value as Value<unknown>);
 		}
 
 		static init() {
-			Client.client.Connect((name, x) => {
-				const signal = Client.map.get(name);
-				if (signal) {
-					signal.call(x);
+			const event = events.Client.Get("client");
+			event.Connect((name, value) => {
+				const gotValue = Client.values.get(name);
+				if (gotValue !== undefined) {
+					gotValue.set(value);
 				}
-			});
-		}
-	}
-	export class Server<X> {
-		public Signal = new Signal<{ Player?: Player; Value: X; name: string }>();
-		static client = events.Server.Get("client");
-		private name = "";
-		constructor(name: string) {
-			this.name = name;
-			this.Signal.listen((x) => {
-				if (x.Player) {
-					Server.client.SendToPlayer(x.Player, x.name, x.Value);
-				} else {
-					Server.client.SendToAllPlayers(x.name, x.Value);
-				}
-			});
-		}
-
-		call(x: X, player?: Player) {
-			this.Signal.call({
-				Player: player,
-				Value: x,
-				name: this.name,
 			});
 		}
 	}
