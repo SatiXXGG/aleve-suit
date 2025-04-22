@@ -29,6 +29,10 @@ export class Queue<T extends defined> {
 		this.queue.clear();
 	}
 
+	public getCurrentQueue() {
+		return this.queue;
+	}
+
 	public processAsync() {
 		this.queue.forEach((value, index) => {
 			this.queue.remove(index);
