@@ -10,4 +10,16 @@ export class Thread {
 		task.wait(time);
 		callback();
 	}
+
+	static waitEventWithTimeout(time: number, event: RBXScriptSignal) {
+		return new Promise((resolve) => {
+			const connection = event.Connect(() => {
+				connection.Disconnect();
+				resolve(true);
+			});
+			task.wait(time);
+			connection.Disconnect();
+			resolve(true);
+		});
+	}
 }
