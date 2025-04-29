@@ -29,6 +29,10 @@ export namespace State {
 		private bindClient() {
 			State.Client.values.set(this.name, this.value as Value<unknown>);
 		}
+
+		private destroy() {
+			this.value.destroy();
+		}
 	}
 
 	export class Client<T> {
