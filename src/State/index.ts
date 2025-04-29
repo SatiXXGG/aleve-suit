@@ -30,7 +30,7 @@ export namespace State {
 			State.Client.values.set(this.name, this.value as Value<unknown>);
 		}
 
-		private destroy() {
+		public destroy() {
 			this.value.destroy();
 		}
 	}
