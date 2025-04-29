@@ -25,4 +25,9 @@ export class Value<T> {
 	get() {
 		return this.value;
 	}
+
+	destroy() {
+		this.onChangeCallbacks.clear();
+		this.value = undefined;
+	}
 }

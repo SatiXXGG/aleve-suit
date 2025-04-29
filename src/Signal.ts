@@ -7,4 +7,8 @@ export class Signal<T = unknown> {
 		this.callbacks.forEach((callback) => callback(args));
 	}
 	constructor() {}
+
+	destroy() {
+		this.callbacks.clear();
+	}
 }

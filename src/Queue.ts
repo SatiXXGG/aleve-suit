@@ -41,4 +41,9 @@ export class Queue<T extends defined> {
 			})();
 		});
 	}
+
+	destroy() {
+		this.queue.clear();
+		this.processCallback = undefined!;
+	}
 }
