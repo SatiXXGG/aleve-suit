@@ -1,9 +1,9 @@
-import { Signal } from "../Signal";
 import { Value } from "../Value";
 import { events } from "./events";
 
 export namespace State {
 	export class Server<T> {
+		static values = new Map<string, Value<unknown>>();
 		public value = new Value<T>();
 		private player: Player | undefined;
 		private name: string;
@@ -21,6 +21,8 @@ export namespace State {
 						event.SendToAllPlayers(name, value);
 					}
 				});
+
+				Server.values.set(this.name, this.value as Value<unknown>);
 			} else if (game.GetService("RunService").IsClient()) {
 				this.bindClient();
 			}
@@ -33,13 +35,30 @@ export namespace State {
 		public destroy() {
 			this.value.destroy();
 		}
+
+		static init() {
+			const event = events.Server.Get("recover");
+			event.Connect((player, name) => {
+				const gotValue = Server.values.get(name);
+				if (gotValue !== undefined) {
+					gotValue.update((x) => x);
+				}
+			});
+		}
 	}
 
 	export class Client<T> {
 		static values = new Map<string, Value<unknown>>();
 		public value = new Value<T>();
+		private name: string;
 		constructor(name: string) {
-			Client.values.set(name, this.value as Value<unknown>);
+			this.name = name;
+			Client.values.set(this.name, this.value as Value<unknown>);
+		}
+
+		recover() {
+			const event = events.Client.Get("recover");
+			event.SendToServer(this.name);
 		}
 
 		static init() {
