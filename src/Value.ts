@@ -27,7 +27,10 @@ export class Value<T> {
 			const converted = value as Record<string, unknown>;
 
 			for (const [key, value] of pairs(converted)) {
-				if (value !== this.lastValue![key as keyof T]) {
+				if (
+					value !== this.lastValue![key as keyof T] &&
+					this.onPropertyChangeCallbacks[key as keyof T] !== undefined
+				) {
 					changedProperties.push(key as string);
 				}
 			}
