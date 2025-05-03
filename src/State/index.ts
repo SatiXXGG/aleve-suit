@@ -1,6 +1,5 @@
 import { Value } from "../Value";
 import { events } from "./events";
-
 export namespace State {
 	export class Server<T> {
 		static values = new Map<string, Value<unknown>>();
@@ -62,6 +61,10 @@ export namespace State {
 		recover() {
 			const event = events.Client.Get("recover");
 			event.SendToServer(this.name);
+		}
+
+		bindProperty(property: keyof T, callback: (value: T[keyof T]) => void) {
+			this.value.onPropertyUpdate(property, callback);
 		}
 
 		static init() {
