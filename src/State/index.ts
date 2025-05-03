@@ -7,6 +7,8 @@ export namespace State {
 		public value = new Value<T>();
 		private player: Player | undefined;
 		private name: string;
+		private lastState = this.value.get();
+
 		constructor(name: string, startValue: T, player?: Player) {
 			this.name = name;
 			this.player = player;
@@ -15,6 +17,7 @@ export namespace State {
 				const event = events.Server.Get("client");
 
 				this.value.listen((value) => {
+					this.lastState = value;
 					if (this.player) {
 						event.SendToPlayer(this.player, name, value);
 					} else {
@@ -51,7 +54,7 @@ export namespace State {
 		static values = new Map<string, Value<unknown>>();
 		public value = new Value<T>();
 		private name: string;
-		constructor(name: string) {
+		constructor(name: string, executionId?: string) {
 			this.name = name;
 			Client.values.set(this.name, this.value as Value<unknown>);
 		}
