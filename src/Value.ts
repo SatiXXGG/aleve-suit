@@ -22,7 +22,7 @@ export class Value<T> {
 		this.lastValue = undefined;
 
 		this.onChangeCallbacks.add((value) => {
-			if (this.lastValue === undefined) return;
+			if (this.lastValue === undefined || type(value) !== "table") return;
 			const changedProperties: string[] = [];
 			const converted = value as Record<string, unknown>;
 
