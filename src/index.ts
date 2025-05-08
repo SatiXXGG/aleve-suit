@@ -6,5 +6,5 @@ import { State } from "./State";
 import { Thread } from "./Thread";
 import { Time } from "./Time";
 import { Value } from "./Value";
-
-export { Path as Find, Signal, Thread, Time, Value, Character, State, Queue };
+import { InputService, Input } from "./InputService";
+export { Path as Find, Signal, Thread, Time, Value, Character, State, Queue, InputService, Input };
