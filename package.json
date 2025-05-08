@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/aleve-suit",
-  "version": "1.9.3",
+  "version": "1.10.0",
   "main": "out/init.lua",
   "scripts": {
     "build": "rbxtsc",
