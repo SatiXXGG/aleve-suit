@@ -7,4 +7,6 @@ import { Thread } from "./Thread";
 import { Time } from "./Time";
 import { Value } from "./Value";
 import { InputService, Input } from "./InputService";
-export { Path as Find, Signal, Thread, Time, Value, Character, State, Queue, InputService, Input };
+import { Cache } from "./Cache";
+
+export { Path as Find, Signal, Thread, Time, Value, Character, State, Queue, InputService, Input, Cache };
