@@ -39,4 +39,10 @@ export class Cache<X, T> {
 	clearKey(key: X) {
 		this.cache.delete(key);
 	}
+
+	forEach(callback: (index: X, value: T) => void) {
+		this.cache.forEach((value, key) => {
+			callback(key, value.value);
+		});
+	}
 }
